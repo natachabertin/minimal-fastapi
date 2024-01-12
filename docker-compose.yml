@@ -13,6 +13,4 @@ services:
       - ./backend/:/backend/
     ports:
       - "8000:8000"
-    depends_on:
-      - db
     stop_signal: SIGINT
