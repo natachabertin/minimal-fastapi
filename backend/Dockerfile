@@ -7,7 +7,7 @@ ENV PYTHONBUFFERED 1
 
 # install system dependencies
 RUN apt-get update \
-  && apt-get -y install netcat gcc postgresql \
+  && apt-get -y install gcc postgresql \
   && apt-get clean
 
 # install python dependencies
