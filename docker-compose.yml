@@ -12,5 +12,5 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./backend/:/backend/
-    command: uvicorn app.api.server:app --reload
+    command: uvicorn app.main:app --reload
     stop_signal: SIGINT
