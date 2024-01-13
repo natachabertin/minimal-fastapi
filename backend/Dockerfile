@@ -15,9 +15,10 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt /backend/requirements.txt
 RUN pip install -r requirements.txt
 
+# Replicate entire backend dir
 COPY . /backend
 
-#RUN mkdir -p app
-#ADD . /app
-#WORKDIR /app
+# Set /app as source dir
 ENV PYTHONPATH "/backend/app"
+
+CMD ["uvicorn", "app.main:app", "--reload","--host", "0.0.0.0", "--port", "8000"]
