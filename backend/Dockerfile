@@ -15,9 +15,9 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt /backend/requirements.txt
 RUN pip install -r requirements.txt
 
-# COPY . /backend
+COPY . /backend
 
-RUN mkdir p- /app
-ADD . /app
-WORKDIR /app
+#RUN mkdir -p app
+#ADD . /app
+#WORKDIR /app
 ENV PYTHONPATH "/backend/app"
