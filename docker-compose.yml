@@ -3,7 +3,7 @@ version: '3.9'
 services:
   server:
     container_name: api-docker
-    network_mode: "host"
+    # network_mode: "host"
     env_file:
       - ./backend/.env
     build:
@@ -13,4 +13,6 @@ services:
     volumes:
       - ./backend/:/backend/
     command: uvicorn app.main:app --reload
+    ports:
+      - "8000:8000"
     stop_signal: SIGINT
