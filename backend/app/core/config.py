@@ -1,23 +1,24 @@
-from databases import DatabaseURL
-from starlette.config import Config
-from starlette.datastructures import Secret
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-config = Config(".env")
 
-PROJECT_NAME = "phresh"
-VERSION = "1.0.0"
-API_PREFIX = "/api"
+class Settings(BaseSettings):
+    app_name: str = "Minimal FastAPI Sample"
+    # Server config
+    api_prefix: str = "/api"
+    version: str
 
-SECRET_KEY = config("SECRET_KEY", cast=Secret, default="CHANGEME")
+    # Server security
+    allowed_origins: list = ["*"]
+    allowed_methods: list = ["*"]
+    allowed_headers: list = ["*"]
 
-POSTGRES_USER = config("POSTGRES_USER", cast=str)
-POSTGRES_PASSWORD = config("POSTGRES_PASSWORD", cast=Secret)
-POSTGRES_SERVER = config("POSTGRES_SERVER", cast=str, default="db")
-POSTGRES_PORT = config("POSTGRES_PORT", cast=str, default="5432")
-POSTGRES_DB = config("POSTGRES_DB", cast=str)
+    # PG DB config
+    postgres_user: str
+    postgres_password: str
+    postgres_host: str
+    postgres_port: int
+    postgres_db_name: str
 
-DATABASE_URL = config(
-    "DATABASE_URL",
-    cast=DatabaseURL,
-    default=f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
-)
+    model_config = SettingsConfigDict(env_file="../../.env", extra='ignore')
+
+
