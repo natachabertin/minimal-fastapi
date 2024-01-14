@@ -17,7 +17,7 @@ services:
 
   db:
     image: postgres:16-bookworm
-    container_name: pg-db
+    container_name: pg-db-minimal
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
