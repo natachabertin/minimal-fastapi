@@ -7,6 +7,11 @@ class Settings(BaseSettings):
     api_prefix: str = "/api"
     version: str
 
+    # Server security
+    allowed_origins: list = ["*"]
+    allowed_methods: list = ["*"]
+    allowed_headers: list = ["*"]
+
     # PG DB config
     postgres_user: str
     postgres_password: str
