@@ -6,7 +6,7 @@ def configure_server():
     """Creates and configures fastapi application."""
     app = FastAPI()
 
-    ALLOWED_ORIGINS = [
+    ALLOWED_ORIGINS = ["*",
         "http://127.0.0.1:8000",
         "http://0.0.0.0:8000",
         "http://localhost:8000",

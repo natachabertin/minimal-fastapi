@@ -1,5 +1,5 @@
-from backend.app.api.routes.routes_definitions import expose_routes
-from backend.app.core.server import configure_server
+from app.api.routes.routes_definitions import expose_routes
+from app.core.server import configure_server
 
 
 app = configure_server()
