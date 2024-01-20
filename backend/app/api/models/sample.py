@@ -39,7 +39,6 @@ class SampleRead(SampleBase):
     pass
 
 
-
 class SampleCreate(SampleBase):
     name: str
     price: float
