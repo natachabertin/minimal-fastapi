@@ -6,15 +6,14 @@ from app.main import settings
 
 
 async_engine = create_async_engine(
-   settings.db_async_connection_str,
-   echo=True,
-   future=True
+    settings.db_url,
+    echo=settings.db
 )
 
 
 async def get_async_session() -> AsyncSession:
-   async_session = sessionmaker(
-       bind=async_engine, class_=AsyncSession, expire_on_commit=False
-   )
-   async with async_session() as session:
-       yield session
+    async_session = sessionmaker(
+        bind=async_engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with async_session() as session:
+        yield session
