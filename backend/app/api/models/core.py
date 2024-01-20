@@ -1,4 +1,3 @@
-import uuid as uuid_pkg
 from datetime import datetime
 from typing import Optional
 
