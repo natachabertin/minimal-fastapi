@@ -7,7 +7,7 @@ from app.main import settings
 
 async_engine = create_async_engine(
    settings.db_async_connection_str,
-   echo=True,
+   echo=settings.db,
    future=True
 )
 
