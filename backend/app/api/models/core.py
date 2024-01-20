@@ -9,7 +9,7 @@ class DBMixin(SQLModel):
     id: Optional[int] = Field(default=None, primary_key=True)
 
 
-class TimestampMixin(SQLModel):
+class AuditMixin(SQLModel):
     created_at: datetime = Field(
         default_factory=datetime.now,
         nullable=False,
