@@ -5,10 +5,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Minimal FastAPI Sample"
     # Server config
+    app_name: str = "Minimal FastAPI Sample"
     api_prefix: str = "/api"
     version: str
+
+    # Environment config
+    environment="dev"
+    db_echo=True
 
     # Server security
     allowed_origins: list = ["*"]
