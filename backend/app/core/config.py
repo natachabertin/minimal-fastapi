@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     version: str
 
     # Environment config
-    environment="dev"
-    db_echo=True
+    environment: str = "dev"
+    db_echo: bool = False
 
     # Server security
     allowed_origins: list = ["*"]
