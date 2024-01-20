@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlmodel import Field, SQLModel
 
 
-class UUIDModel(SQLModel):
+class DBMixin(SQLModel):
     uuid: uuid_pkg.UUID = Field(
         default_factory=uuid_pkg.uuid4,
         primary_key=True,
@@ -18,7 +18,7 @@ class UUIDModel(SQLModel):
     )
 
 
-class TimestampModel(SQLModel):
+class TimestampMixin(SQLModel):
     created_at: datetime = Field(
         default_factory=datetime.now,
         nullable=False,
