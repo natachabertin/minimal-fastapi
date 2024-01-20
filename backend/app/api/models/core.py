@@ -1,21 +1,13 @@
 import uuid as uuid_pkg
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import text
 from sqlmodel import Field, SQLModel
 
 
 class DBMixin(SQLModel):
-    uuid: uuid_pkg.UUID = Field(
-        default_factory=uuid_pkg.uuid4,
-        primary_key=True,
-        index=True,
-        nullable=False,
-        sa_column_kwargs={
-            "server_default": text("gen_random_uuid()"),
-            "unique": True
-        }
-    )
+    id: Optional[int] = Field(default=None, primary_key=True)
 
 
 class TimestampMixin(SQLModel):
