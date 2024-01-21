@@ -24,9 +24,9 @@ loc-start-clean: ## Drop the DB then run infra context except API (to be ran fro
 cont-start: ## Run inside docker container
 	docker compose -f docker-compose.yml down --remove-orphans
 	docker compose -f docker-compose.yml up db -d
-	# ----When finished, migra command goes here----
-	# ----When finished migrations, uvicorn command goes here----
-	docker compose -f docker-compose.yml up app
+	docker compose -f docker-compose.yml up server
+# ----When finished, migra command goes here----
+# ----When finished migrations, uvicorn command goes here----
 
 cont-stop: check-deps ## Stop docker container
 	docker compose -f docker-compose.yml down --remove-orphans
