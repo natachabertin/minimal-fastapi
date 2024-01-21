@@ -1,9 +1,11 @@
 .PHONY: *
 
+
 # Env vars
 APP			?=backend
 SRC_DIR		?=app
 BUILD_TAG	?=local
+
 
 # Load dotenv:
 ifeq ($(OS),Windows_NT)
@@ -30,6 +32,7 @@ cont-start: ## Run inside docker container
 
 cont-stop: check-deps ## Stop docker container
 	docker compose -f docker-compose.yml down --remove-orphans
+
 
 # Docker commands
 d-build: ## Build dockerized env and run app in the background
@@ -63,12 +66,14 @@ d-reset-db: ## Resets the database and run migrations. After running this comman
 	sleep 3
 	make migrate-up
 
+
 ## Requirements install
 reqs-prod: ## Install prod only libraries (prod only; everywhere else you need dev libraries)
 	pip install -r requirements.txt
 
 reqs-dev: ## Install prod and non-prod libraries
 	pip install -r requirements-dev.txt
+
 
 ## FastAPI commands
 fapi-run: ## Run FastAPI server locally, no debug and in port default
@@ -77,19 +82,21 @@ fapi-run: ## Run FastAPI server locally, no debug and in port default
 fapi-debug: ## Run FastAPI server locally, debugging. Ensure you set the port in your env file.
 	cd $(WORKDIR)/$(SRC_DIR)/app run --host ${FLASK_HOST} --port=$(PORT) --debug
 
+
+# Alembic migrations
+mig-up: ## Run migrations
+	cd $(WORKDIR)/$(SRC_DIR) && alembic db upgrade
+
+mig-down: ## Run migrations
+	cd $(WORKDIR)/$(SRC_DIR) && alembic db downgrade
+
+MIGRATION_NAME ?= $(shell bash -c 'read -p "Migration name? Example: removing column id." mig_name; echo $$mig_name')
+mig-gen: ## Auto generate migrations. Add existence validations after, before upgrading!
+	@clear
+	cd $(WORKDIR)/$(SRC_DIR) && alembic revision --autogenerate -m "$(MIGRATION_NAME)"
+
+
 ### Yet to apply commands
-#
-## Alembic migrations
-#mig-up: ## Run migrations
-#	cd $(WORKDIR)/$(SRC_DIR) && alembic db upgrade
-#
-#mig-down: ## Run migrations
-#	cd $(WORKDIR)/$(SRC_DIR) && alembic db downgrade
-#
-#MIGRATION_NAME ?= $(shell bash -c 'read -p "Migration name? Example: removing column id." mig_name; echo $$mig_name')
-#mig-gen: ## Auto generate migrations. Add existence validations after, before upgrading!
-#	@clear
-#	cd $(WORKDIR)/$(SRC_DIR) && alembic revision --autogenerate -m "$(MIGRATION_NAME)"
 #
 #test:
 #	pytest -v --cov=.
