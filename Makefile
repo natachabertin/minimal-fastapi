@@ -1,17 +1,34 @@
 .PHONY: *
 
-
-# Env vars
-APP			?=backend
-SRC_DIR		?=app
-BUILD_TAG	?=local
-
-
-# Load dotenv:
+# Project dirs:
 ifeq ($(OS),Windows_NT)
-	WORKDIR   ?= $(shell cd)
+PROJECT_DIR ?= $(shell cd)
 else
-    WORKDIR   ?= $(shell pwd)
+PROJECT_DIR   ?= $(shell pwd)
+endif
+
+ifeq ($(OS),Windows_NT)
+BE_DIR ?= $(shell cd $(PROJECT_DIR) && cd backend && cd)
+else
+BE_DIR ?= $(shell cd $(PROJECT_DIR) && cd backend && pwd)
+endif
+
+ifeq ($(OS),Windows_NT)
+APP_DIR ?= $(shell cd $(BE_DIR) && cd app && cd)
+else
+APP_DIR ?= $(shell cd $(BE_DIR) && cd app && pwd)
+endif
+
+ifeq ($(OS),Windows_NT)
+MIG_DIR ?= $(shell cd $(APP_DIR) && cd db\migrations && cd)
+else
+MIG_DIR ?= $(shell cd $(APP_DIR) && cd db\migrations && pwd)
+endif
+
+ifeq ($(OS),Windows_NT)
+TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && cd)
+else
+TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && pwd)
 endif
 
 
@@ -69,49 +86,48 @@ d-reset-db: ## Resets the database and run migrations. After running this comman
 
 ## Requirements install
 reqs-prod: ## Install prod only libraries (prod only; everywhere else you need dev libraries)
-	pip install -r requirements.txt
+	cd $(BE_DIR) && pip install -r requirements.txt
 
 reqs-dev: ## Install prod and non-prod libraries
-	pip install -r requirements-dev.txt
+	cd $(BE_DIR) && pip install -r requirements-dev.txt
 
 
 ## FastAPI commands
 fapi-run: ## Run FastAPI server locally, no debug and in port default
-	cd $(WORKDIR)/$(SRC_DIR) && python -m uvicorn main:app --reload
+	cd $(APP_DIR) && python -m uvicorn main:app --reload
 
-fapi-debug: ## Run FastAPI server locally, debugging. Ensure you set the port in your env file.
-	cd $(WORKDIR)/$(SRC_DIR)/app run --host ${FLASK_HOST} --port=$(PORT) --debug
+fapi-debug: ## Run FastAPI server locally, debugging.
+	cd $(APP_DIR) && python -m uvicorn main:app --debug
 
 
 # Alembic migrations
 mig-up: ## Run migrations
-	cd $(WORKDIR)/$(SRC_DIR) && alembic db upgrade
+	cd $(MIG_DIR) && alembic db upgrade
 
 mig-down: ## Run migrations
-	cd $(WORKDIR)/$(SRC_DIR) && alembic db downgrade
+	cd $(MIG_DIR) && alembic db downgrade
 
 MIGRATION_NAME ?= $(shell bash -c 'read -p "Migration name? Example: removing column id." mig_name; echo $$mig_name')
 mig-gen: ## Auto generate migrations. Add existence validations after, before upgrading!
-	@clear
-	cd $(WORKDIR)/$(SRC_DIR) && alembic revision --autogenerate -m "$(MIGRATION_NAME)"
+	cd $(MIG_DIR) && alembic revision --autogenerate -m "$(MIGRATION_NAME)"
 
 
 ### Yet to apply commands
 #
 #test:
-#	pytest -v --cov=.
+#	cd $(TEST_DIR) && pytest -v --cov=.
 #
 #test-unit:
-#	pytest -v tests/unit --cov=.
+#	cd $(TEST_DIR) && pytest -v tests/unit --cov=.
 #
 #test-int:
-#	pytest -v tests/integration
+#	cd $(TEST_DIR) && pytest -v tests/integration
 #
 #test-missing:
-#	pytest --cov=. --cov-report term-missing
+#	cd $(TEST_DIR) && pytest --cov=. --cov-report term-missing
 #
 #test-cov80:
-#	pytest --cov=. --cov-fail-under=80
+#	cd $(TEST_DIR) && pytest --cov=. --cov-fail-under=80
 #
 #cli:
 #	python app/cli.py
