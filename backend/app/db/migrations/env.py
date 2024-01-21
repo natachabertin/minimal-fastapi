@@ -5,7 +5,10 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlmodel import SQLModel
 
+from app.main import settings
+from app.api.models import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -20,7 +23,16 @@ if alembic_config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = SQLModel.metadata
+
+
+target_metadata.naming_convention = {
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
 
 # other values from the alembic_config, defined by the needs of env.py,
 # can be acquired:
@@ -40,7 +52,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = alembic_config.get_main_option("sqlalchemy.url")
+    url = settings.db_url
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -62,11 +74,13 @@ def do_run_migrations(connection: Connection) -> None:
 async def run_async_migrations() -> None:
     """In this scenario we need to create an Engine
     and associate a connection with the context.
-
     """
+    config_section = alembic_config.get_section(alembic_config.config_ini_section)
+    url = settings.db_url
+    config_section["sqlalchemy.url"] = url
 
     connectable = async_engine_from_config(
-        alembic_config.get_section(alembic_config.config_ini_section, {}),
+        config_section,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
@@ -79,7 +93,6 @@ async def run_async_migrations() -> None:
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
-
     asyncio.run(run_async_migrations())
 
 
