@@ -22,7 +22,7 @@ endif
 ifeq ($(OS),Windows_NT)
 MIG_DIR ?= $(shell cd $(APP_DIR) && cd db\migrations && cd)
 else
-MIG_DIR ?= $(shell cd $(APP_DIR) && cd db\migrations && pwd)
+MIG_DIR ?= $(shell cd $(APP_DIR) && cd db/migrations && pwd)
 endif
 
 ifeq ($(OS),Windows_NT)
@@ -31,6 +31,8 @@ else
 TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && pwd)
 endif
 
+var:
+	echo $(MIG_DIR)
 
 # Fast onboarding setup:
 onboarding: # Clone the repo, copy the template dotenv to a new .env file and run this command
