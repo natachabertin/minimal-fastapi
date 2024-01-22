@@ -32,6 +32,13 @@ TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && pwd)
 endif
 
 
+# Fast onboarding setup:
+onboarding: # Clone the repo, copy the template dotenv to a new .env file and run this command
+	docker compose -f docker-compose.yml down
+	docker compose -f docker-compose.yml up db -d
+	cd $(BE_DIR) && pip install -r requirements-dev.txt
+
+
 ## Compose context commands (run infra on compose as context to run app on IDE or container
 loc-start:  ## Run compose with all infra context except the API we want to run in IDE
 	docker compose -f docker-compose.yml up db -d
