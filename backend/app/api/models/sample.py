@@ -1,12 +1,13 @@
+from enum import Enum
 from typing import Optional
 
 from sqlalchemy import event
-from sqlmodel import SQLModel
+from sqlmodel import SQLModel, Enum
 
 from app.api.models.core import DBMixin, AuditMixin
 
 
-class SampleType(str, SQLModel.Enum):
+class SampleType(str, Enum):
     food_sample = "food"
     paint_sample = "paint"
     fabric_sample = "fabric"
@@ -22,16 +23,16 @@ def _create_enums(metadata, conn, **kw):  # noqa: indirect usage
     SampleType.create(conn, checkfirst=True)
 
 
-class SampleBase(SQLModel, DBMixin, AuditMixin, table=True):
+class SampleBase(SQLModel):
     """Common properties to all Sample models."""
     name: str
-    sample_type: Optional[SampleType] = SampleType.food_sample
+    sample_type: str  #Optional[SampleType] = SampleType.food_sample
     price: Optional[float] = 0.0
 
 
-class SampleStored(SampleBase, DBMixin, AuditMixin, table=True):
+class SampleStored(DBMixin, SampleBase, AuditMixin, table=True):
     name: str
-    sample_type: SampleType
+    sample_type: str
     price: float
 
 
@@ -45,4 +46,4 @@ class SampleCreate(SampleBase):
 
 
 class SampleUpdate(SampleBase):
-    sample_type: Optional[SampleType]
+    sample_type: Optional[str]
