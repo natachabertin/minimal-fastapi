@@ -53,6 +53,8 @@ onboarding: # Clone the repo, copy the template dotenv to a new .env file and ru
 	docker compose -f docker-compose.yml up db -d
 	cd $(BE_DIR) && pip install -r requirements-dev.txt
 
+resume:
+	docker compose -f docker-compose.yml up db -d
 
 ## Compose context commands (run infra on compose as context to run app on IDE or container
 loc-start:  ## Run compose with all infra context except the API we want to run in IDE
