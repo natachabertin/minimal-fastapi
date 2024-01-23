@@ -31,8 +31,21 @@ else
 TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && pwd)
 endif
 
-var:
-	echo $(MIG_DIR)
+ifeq ($(OS),Windows_NT)
+DOTENV ?= $(BE_DIR)\.env
+else
+DOTENV ?= $(BE_DIR)/.env
+endif
+
+# Load dotenv:
+ifeq ($(OS),Windows_NT)
+ENV_CMD := powershell -command "& {foreach ($env_var in Get-Content $DOTENV) { $env_var -as [System.Collections.DictionaryEntry]; }}"
+else
+ENV_CMD := export
+endif
+include $(DOTENV)
+export $(shell $(ENV_CMD))
+
 
 # Fast onboarding setup:
 onboarding: # Clone the repo, copy the template dotenv to a new .env file and run this command
@@ -118,7 +131,7 @@ mig-down: ## Run migrations
 
 MIGRATION_NAME ?= $(shell bash -c 'read -p "Migration name? Example: removing column id." mig_name; echo $$mig_name')
 mig-gen: ## Auto generate migrations. Add existence validations after, before upgrading!
-	cd $(MIG_DIR) && alembic revision --autogenerate -m "$(MIGRATION_NAME)"
+	alembic -c backend/alembic.ini revision --autogenerate -m "$(MIGRATION_NAME)"
 
 
 ### Yet to apply commands
