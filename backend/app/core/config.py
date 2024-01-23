@@ -1,4 +1,5 @@
 from functools import cached_property
+from pathlib import Path
 
 from pydantic import computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -26,7 +27,7 @@ class Settings(BaseSettings):
     postgres_port: int
     postgres_db_name: str
 
-    model_config = SettingsConfigDict(env_file="../../.env", extra='ignore')
+    model_config = SettingsConfigDict(env_file=Path(__file__).resolve().parent / "../../.env", extra='ignore')
 
     @computed_field
     @cached_property

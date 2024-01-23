@@ -126,12 +126,16 @@ fapi-debug: ## Run FastAPI server locally, debugging.
 
 # Alembic migrations
 mig-up: ## Run migrations
-	cd $(MIG_DIR) && alembic db upgrade
+	alembic -c backend/alembic.ini upgrade head
 
 mig-down: ## Run migrations
-	cd $(MIG_DIR) && alembic db downgrade
+	alembic -c backend/alembic.ini downgrade base
 
-MIGRATION_NAME ?= $(shell bash -c 'read -p "Migration name? Example: removing column id." mig_name; echo $$mig_name')
+ifeq ($(OS),Windows_NT)
+    MIGRATION_NAME ?= $(shell powershell -c "$$mig_name = Read-Host 'Migration name? Example: removing column id.'; Write-Output $$mig_name")
+else
+    MIGRATION_NAME ?= $(shell bash -c 'read -p "Migration name? Example: removing column id." mig_name; echo $$mig_name')
+endif
 mig-gen: ## Auto generate migrations. Add existence validations after, before upgrading!
 	alembic -c backend/alembic.ini revision --autogenerate -m "$(MIGRATION_NAME)"
 
