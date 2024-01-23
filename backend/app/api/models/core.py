@@ -4,8 +4,13 @@ from typing import Optional
 from sqlalchemy import text
 from sqlmodel import Field, SQLModel
 
+class UUIDMixin(SQLModel):
+    """Generates UUID pk for the tables.
 
-class DBMixin(SQLModel):
+    Usage:
+        MUST GO FIRST, then the ObjectBase, then other mixins and table=true:
+        `SampleStored(UUIDMixin, SampleBase, AuditMixin, table=True)`
+    """
     id: Optional[int] = Field(default=None, primary_key=True)
 
 

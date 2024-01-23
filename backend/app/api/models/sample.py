@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy import event
 from sqlmodel import SQLModel, Enum
 
-from app.api.models.core import DBMixin, AuditMixin
+from app.api.models.core import UUIDMixin, AuditMixin
 
 
 class SampleType(str, Enum):
