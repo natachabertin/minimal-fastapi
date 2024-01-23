@@ -26,12 +26,3 @@ class AuditMixin(SQLModel):
            "onupdate": text("current_timestamp(0)")
        }
     )
-
-    deleted_at: datetime = Field(
-       default_factory=datetime.now,
-       nullable=True,
-       sa_column_kwargs={
-           "server_default": text("current_timestamp(0)"),
-           "ondelete": text("current_timestamp(0)")
-       }
-    )
