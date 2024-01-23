@@ -30,7 +30,9 @@ class SampleBase(SQLModel):
     price: Optional[float] = 0.0
 
 
-class SampleStored(DBMixin, SampleBase, AuditMixin, table=True):
+class SampleDB(UUIDMixin, SampleBase, AuditMixin, table=True):
+    __tablename__ = "samples"
+
     name: str
     sample_type: str
     price: float

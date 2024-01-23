@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from sqlmodel import SQLModel
 
 from app.main import settings
-from app.api.models.sample import SampleStored
+from app.api.models.sample import SampleDB, SampleType  # noqa: 'autogenerate' support
 
 
 # this is the Alembic Config object, which provides
