@@ -22,14 +22,14 @@ def _create_enums(metadata, conn, **kw):  # noqa: indirect usage
     SampleType.create(conn, checkfirst=True)
 
 
-class SampleBase(SQLModel):
+class SampleBase(SQLModel, DBMixin, AuditMixin, table=True):
     """Common properties to all Sample models."""
     name: str
     sample_type: Optional[SampleType] = SampleType.food_sample
     price: Optional[float] = 0.0
 
 
-class SampleStored(DBMixin, AuditMixin, SampleBase):
+class SampleStored(SampleBase, DBMixin, AuditMixin, table=True):
     name: str
     sample_type: SampleType
     price: float
