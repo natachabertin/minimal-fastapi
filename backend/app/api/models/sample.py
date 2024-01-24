@@ -17,7 +17,7 @@ class SampleBase(SQLModel):
     """Common properties to all Sample models."""
     name: str
     sample_type: Optional[SampleType] = SampleType.food_sample
-    price: Optional[float] = 0.0
+    price: Optional[float]
 
 
 class SampleDB(UUIDMixin, SampleBase, AuditMixin, table=True):
