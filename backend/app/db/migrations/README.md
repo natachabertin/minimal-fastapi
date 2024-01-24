@@ -10,33 +10,34 @@ See makefile commands staring with `mig-``.
 3. Link enum to the table typing the linked fieldname with the enum class name.
 
 Here is an example:
+
 ```python
 from enum import Enum
 from typing import Optional
 
 from sqlmodel import SQLModel
 
-from app.api.models.core import UUIDMixin, AuditMixin
+from app.api.models._core import UUIDMixin, AuditMixin
 
 
 class SampleType(str, Enum):
-    food_sample = "food"
-    paint_sample = "paint"
+   food_sample = "food"
+   paint_sample = "paint"
 
 
 class SampleBase(SQLModel):
-    """Common properties to all Sample models."""
-    name: str
-    sample_type: Optional[SampleType] = SampleType.food_sample
-    price: Optional[float] = 0.0
+   """Common properties to all Sample models."""
+   name: str
+   sample_type: Optional[SampleType] = SampleType.food_sample
+   price: Optional[float] = 0.0
 
 
 class SampleDB(UUIDMixin, SampleBase, AuditMixin, table=True):
-    __tablename__ = "samples"
+   __tablename__ = "samples"
 
-    name: str
-    sample_type: SampleType
-    price: float
+   name: str
+   sample_type: SampleType
+   price: float
 ```
 4. Then after running migrations autogenerate command, you'll have a table with an enum field, like this:
 
