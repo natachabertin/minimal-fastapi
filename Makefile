@@ -93,7 +93,7 @@ d-rm-container:  ## Remove backend container
 
 d-rm-db:  ## Remove backend db
 	docker compose -f docker-compose.yml down --remove-orphans
-	docker volume rm db
+	docker volume rm pg-db-minimal
 
 d-bash: ## Enter bash console in dockerized backend container
 	docker compose run backend sh
