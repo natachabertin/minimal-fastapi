@@ -3,7 +3,7 @@ from typing import Optional
 
 from sqlmodel import SQLModel
 
-from app.api.models.core import UUIDMixin, AuditMixin
+from app.api.models._core import UUIDMixin, AuditMixin
 
 
 class SampleType(str, Enum):
