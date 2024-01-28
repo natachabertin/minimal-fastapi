@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+from sqlmodel.ext.asyncio.session import AsyncSession
 from starlette.status import HTTP_201_CREATED
 
 from app.api.models.sample import SampleRead, SampleCreate
@@ -28,7 +29,7 @@ async def get_all_samples() -> List[dict]:
 )
 async def create_sample(
        data: SampleCreate,
-       db = Depends(get_async_session)
+       db: AsyncSession = Depends(get_async_session)
 ):
     created_sample = await SampleCRUD(db=db).create(data=data)
 
