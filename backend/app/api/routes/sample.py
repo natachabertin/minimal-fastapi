@@ -5,7 +5,8 @@ from starlette.status import HTTP_201_CREATED
 
 from app.api.models.sample import SampleRead, SampleCreate
 from app.api.services.sample import SampleCRUD
-from app.db.session import DBSession, get_async_session
+from app.db.session import get_async_session
+
 
 router = APIRouter()
 
@@ -27,8 +28,8 @@ async def get_all_samples() -> List[dict]:
 )
 async def create_sample(
        data: SampleCreate,
-       db: DBSession = Depends(get_async_session)
+       db = Depends(get_async_session)
 ):
-    created_sample = await SampleCRUD.create(db=db, data=data)
+    created_sample = await SampleCRUD(db=db).create(data=data)
 
     return created_sample

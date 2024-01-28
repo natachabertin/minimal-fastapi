@@ -63,17 +63,16 @@ loc-start:  ## Run compose with all infra context except the API we want to run 
 loc-start-clean: ## Drop the DB then run infra context except API (to be ran from IDE)
 	docker compose -f docker-compose.yml down --remove-orphans
 	docker compose -f docker-compose.yml up db -d
+	make mig-up
 
 cont-start: ## Run inside docker container
 	docker compose -f docker-compose.yml down --remove-orphans
 	docker compose -f docker-compose.yml up db -d
+	make mig-up
 	docker compose -f docker-compose.yml up server
-# ----When finished, migra command goes here----
-# ----When finished migrations, uvicorn command goes here----
 
 cont-stop: check-deps ## Stop docker container
 	docker compose -f docker-compose.yml down --remove-orphans
-
 
 # Docker commands
 d-build: ## Build dockerized env and run app in the background
@@ -103,9 +102,9 @@ d-pg: ## Enter Postgres console inside dockerized backend container
 
 d-reset-db: ## Resets the database and run migrations. After running this command, as the volume is not persistent you should get an empty db
 	docker compose down
-	make start-local
+	make loc-start
 	sleep 3
-	make migrate-up
+	make mig-up
 
 
 ## Requirements install
