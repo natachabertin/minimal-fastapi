@@ -46,3 +46,10 @@ class SampleDB(UUIDMixin, SampleBase, AuditMixin, table=True):
         sa.Enum('food_sample', 'paint_sample', name='sampletype'),
     nullable=False),
    ```
+5. To ensure migration down deletes the enum properly, after dropping the table, drop the enum by its name (no underscore) like this:
+
+    ```python
+    op.drop_table('samples')
+    sa.Enum('food_sample', 'paint_sample', name='sampletype').drop(op.get_bind())
+   ```
+You can check the result in your DB manager, under `db > schemas > public > data types`: `sampletype` and `_sampletype` should not be there anymore.
