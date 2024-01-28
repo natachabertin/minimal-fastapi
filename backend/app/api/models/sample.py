@@ -1,10 +1,9 @@
 from enum import Enum
 from typing import Optional
 
-from sqlalchemy import event
-from sqlmodel import SQLModel, Enum
+from sqlmodel import SQLModel
 
-from app.api.models.core import UUIDMixin, AuditMixin
+from app.api.models._core import UUIDMixin, AuditMixin
 
 
 class SampleType(str, Enum):
@@ -14,27 +13,18 @@ class SampleType(str, Enum):
     cosmetic_sample = "cosmetic"
 
 
-@event.listens_for(SQLModel.metadata, "before_create")
-def _create_enums(metadata, conn, **kw):  # noqa: indirect usage
-    """
-    Ensure enums are created before continuing with the tables.
-    This helps on test DB creation.
-    """
-    SampleType.create(conn, checkfirst=True)
-
-
 class SampleBase(SQLModel):
     """Common properties to all Sample models."""
     name: str
-    sample_type: str  #Optional[SampleType] = SampleType.food_sample
-    price: Optional[float] = 0.0
+    sample_type: Optional[SampleType] = SampleType.food_sample
+    price: Optional[float]
 
 
 class SampleDB(UUIDMixin, SampleBase, AuditMixin, table=True):
     __tablename__ = "samples"
 
     name: str
-    sample_type: str
+    sample_type: SampleType
     price: float
 
 

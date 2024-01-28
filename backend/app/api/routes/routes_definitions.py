@@ -1,4 +1,4 @@
-from app.api.routes.samples import router as sample_router
+from app.api.routes.sample import router as sample_router
 
 
 def expose_routes(app):

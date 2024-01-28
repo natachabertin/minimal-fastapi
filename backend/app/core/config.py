@@ -1,4 +1,4 @@
-from functools import cached_property
+from functools import cached_property, lru_cache
 from pathlib import Path
 
 from pydantic import computed_field
@@ -35,3 +35,9 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db_name}"
 
 
+@lru_cache()
+def get_settings():
+    return Settings()
+
+
+settings = get_settings()
