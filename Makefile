@@ -3,39 +3,20 @@
 # Project dirs:
 ifeq ($(OS),Windows_NT)
 PROJECT_DIR ?= $(shell cd)
-else
-PROJECT_DIR   ?= $(shell pwd)
-endif
-
-ifeq ($(OS),Windows_NT)
 BE_DIR ?= $(shell cd $(PROJECT_DIR) && cd backend && cd)
-else
-BE_DIR ?= $(shell cd $(PROJECT_DIR) && cd backend && pwd)
-endif
-
-ifeq ($(OS),Windows_NT)
 APP_DIR ?= $(shell cd $(BE_DIR) && cd app && cd)
-else
-APP_DIR ?= $(shell cd $(BE_DIR) && cd app && pwd)
-endif
-
-ifeq ($(OS),Windows_NT)
 MIG_DIR ?= $(shell cd $(APP_DIR) && cd db\migrations && cd)
-else
-MIG_DIR ?= $(shell cd $(APP_DIR) && cd db/migrations && pwd)
-endif
-
-ifeq ($(OS),Windows_NT)
 TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && cd)
-else
-TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && pwd)
-endif
-
-ifeq ($(OS),Windows_NT)
 DOTENV ?= $(BE_DIR)\.env
 else
+PROJECT_DIR   ?= $(shell pwd)
+BE_DIR ?= $(shell cd $(PROJECT_DIR) && cd backend && pwd)
+APP_DIR ?= $(shell cd $(BE_DIR) && cd app && pwd)
+MIG_DIR ?= $(shell cd $(APP_DIR) && cd db/migrations && pwd)
+TEST_DIR ?= $(shell cd $(BE_DIR) && cd tests && pwd)
 DOTENV ?= $(BE_DIR)/.env
 endif
+
 
 # Load dotenv:
 ifeq ($(OS),Windows_NT)
