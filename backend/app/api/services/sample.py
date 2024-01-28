@@ -8,8 +8,8 @@ class SampleCRUD(CRUDMixin):
         values = data.dict()
 
         stored_sample = SampleDB(**values)
-        self.session.add(stored_sample)
-        await self.session.commit()
-        await self.session.refresh(stored_sample)
+        self.db.add(stored_sample)
+        await self.db.commit()
+        await self.db.refresh(stored_sample)
 
         return stored_sample
