@@ -21,11 +21,12 @@ endif
 # Load dotenv:
 ifeq ($(OS),Windows_NT)
 ENV_CMD := powershell -command "& {foreach ($env_var in Get-Content $DOTENV) { $env_var -as [System.Collections.DictionaryEntry]; }}"
-else
-ENV_CMD := export
-endif
 include $(DOTENV)
 export $(shell $(ENV_CMD))
+else
+include $(DOTENV)
+ENV_CMD := export
+endif
 
 
 # Fast onboarding setup:
@@ -39,7 +40,8 @@ resume:
 
 ## Compose context commands (run infra on compose as context to run app on IDE or container
 loc-start:  ## Run compose with all infra context except the API we want to run in IDE
-	docker compose -f docker-compose.yml up db -d
+	@echo $(BE_DIR) - $(APP_NAME) - $(DOTENV) --  $(shell pwd)
+	docker compose up db
 
 loc-start-clean: ## Drop the DB then run infra context except API (to be ran from IDE)
 	docker compose -f docker-compose.yml down --remove-orphans
