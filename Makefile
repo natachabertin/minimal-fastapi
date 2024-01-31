@@ -40,7 +40,6 @@ resume:
 
 ## Compose context commands (run infra on compose as context to run app on IDE or container
 loc-start:  ## Run compose with all infra context except the API we want to run in IDE
-	@echo $(BE_DIR) - $(APP_NAME) - $(DOTENV) --  $(shell pwd)
 	docker compose up db
 
 loc-start-clean: ## Drop the DB then run infra context except API (to be ran from IDE)
