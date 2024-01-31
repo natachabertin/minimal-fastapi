@@ -40,7 +40,7 @@ resume:
 
 ## Compose context commands (run infra on compose as context to run app on IDE or container
 loc-start:  ## Run compose with all infra context except the API we want to run in IDE
-	docker compose up db
+	docker compose -f docker-compose.yml up db -d
 
 loc-start-clean: ## Drop the DB then run infra context except API (to be ran from IDE)
 	docker compose -f docker-compose.yml down --remove-orphans
