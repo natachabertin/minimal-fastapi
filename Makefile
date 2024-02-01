@@ -121,10 +121,12 @@ mig-gen: ## Auto generate migrations. Add existence validations after, before up
 	alembic -c backend/alembic.ini revision --autogenerate -m "$(MIGRATION_NAME)"
 
 
+# Testing
+test:
+	cd $(TEST_DIR) && pytest -v --cov=.
+
+
 ### Yet to apply commands
-#
-#test:
-#	cd $(TEST_DIR) && pytest -v --cov=.
 #
 #test-unit:
 #	cd $(TEST_DIR) && pytest -v tests/unit --cov=.
