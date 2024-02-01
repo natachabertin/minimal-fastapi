@@ -123,11 +123,12 @@ mig-gen: ## Auto generate migrations. Add existence validations after, before up
 
 # Testing
 test:
-	cd $(TEST_DIR) && pytest -v --cov=.
+	cd $(TEST_DIR) && pytest -vv -p no:warnings
 
 
 ### Yet to apply commands
-#
+#test:
+#	cd $(TEST_DIR) && pytest -v --cov=.
 #test-unit:
 #	cd $(TEST_DIR) && pytest -v tests/unit --cov=.
 #
