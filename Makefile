@@ -21,11 +21,12 @@ endif
 # Load dotenv:
 ifeq ($(OS),Windows_NT)
 ENV_CMD := powershell -command "& {foreach ($env_var in Get-Content $DOTENV) { $env_var -as [System.Collections.DictionaryEntry]; }}"
-else
-ENV_CMD := export
-endif
 include $(DOTENV)
 export $(shell $(ENV_CMD))
+else
+include $(DOTENV)
+ENV_CMD := export
+endif
 
 
 # Fast onboarding setup:
@@ -120,11 +121,14 @@ mig-gen: ## Auto generate migrations. Add existence validations after, before up
 	alembic -c backend/alembic.ini revision --autogenerate -m "$(MIGRATION_NAME)"
 
 
+# Testing
+test:
+	cd $(TEST_DIR) && pytest -vv -p no:warnings
+
+
 ### Yet to apply commands
-#
 #test:
 #	cd $(TEST_DIR) && pytest -v --cov=.
-#
 #test-unit:
 #	cd $(TEST_DIR) && pytest -v tests/unit --cov=.
 #

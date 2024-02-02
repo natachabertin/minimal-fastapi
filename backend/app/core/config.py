@@ -1,5 +1,7 @@
+import logging as log
 from functools import cached_property, lru_cache
 from pathlib import Path
+import sys
 
 from pydantic import computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -32,7 +34,12 @@ class Settings(BaseSettings):
     @computed_field
     @cached_property
     def db_url(self) -> str:
-        return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db_name}"
+        db_link = f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db_name}"
+        if "pytest" in sys.modules:
+            log.debug("-----> Working with TEST db")
+            db_link += "_test"
+
+        return db_link
 
 
 @lru_cache()

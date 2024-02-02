@@ -1,11 +1,9 @@
-from typing import Annotated
-
-from fastapi import Depends
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
+
 
 async_engine = create_async_engine(
     settings.db_url,
