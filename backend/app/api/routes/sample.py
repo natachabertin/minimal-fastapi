@@ -12,7 +12,7 @@ from app.db.session import get_async_session
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 async def get_all_samples() -> List[dict]:
     samples = [
         {"id": 1, "name": "Sample Route", "sample_type": "food_sample", "price": 20.05},
