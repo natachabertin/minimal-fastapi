@@ -24,7 +24,7 @@ def event_loop(request) -> Generator:  # noqa: indirect usage
 async def async_client():
    async with AsyncClient(
            app=app,
-           base_url=f"http://{settings.api_prefix}"
+           base_url="http://127.0.0.1:8000"
    ) as client:
       yield client
 
