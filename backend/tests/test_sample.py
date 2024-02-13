@@ -51,7 +51,6 @@ async def test_post_sample(
     assert response.status_code == 201
 
 
-
 @pytest.mark.asyncio
 async def test_post_sample_error(
        async_client: AsyncClient,
