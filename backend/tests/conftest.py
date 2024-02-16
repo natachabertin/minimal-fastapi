@@ -1,4 +1,5 @@
 import asyncio
+import asyncpg
 from typing import Generator
 
 import pytest, pytest_asyncio
@@ -9,7 +10,6 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.db.session import async_engine
-
 from app.main import app
 
 
@@ -20,28 +20,51 @@ def event_loop(request) -> Generator:  # noqa: indirect usage
    loop.close()
 
 
+
+
+async def create_testing_database():
+    """
+    WARN: This is a challenge non prod project; so, in order to create the test db on start,
+    it connects to postgres standard DB (in here, prod db) and creates the test db in the next line.
+
+    If you use this code in a productive CI/CD, you may wanna change the way the DB is created.
+    You may not have permissions to connect to prod DB and create another DB from there.
+    You should go further and create a user with permissions first,
+    or just create a blank DB_test in a previous step in makefile test command.
+    """
+    try:
+        conn = await asyncpg.connect("postgresql://postgres:postgres@localhost/postgres")
+        await conn.execute("CREATE DATABASE postgres_test")
+        print("Testing database created successfully")
+    except asyncpg.exceptions.DuplicateDatabaseError:
+        print("Database already exists")
+    finally:
+        await conn.close()
+
+
 @pytest_asyncio.fixture
 async def async_client():
    async with AsyncClient(
            app=app,
-           base_url=f"http://{settings.api_prefix}"
+           base_url="http://127.0.0.1:8000"
    ) as client:
       yield client
 
 
 @pytest_asyncio.fixture(scope="function")
 async def async_session() -> AsyncSession:
-   session = sessionmaker(
-       async_engine, class_=AsyncSession, expire_on_commit=False
-   )
+    await create_testing_database()
+    session = sessionmaker(
+        async_engine, class_=AsyncSession, expire_on_commit=False
+    )
 
-   async with session() as sess:
-       async with async_engine.begin() as conn:
-           await conn.run_sync(SQLModel.metadata.create_all)
+    async with session() as sess:
+        async with async_engine.begin() as conn:
+            await conn.run_sync(SQLModel.metadata.create_all)
 
-       yield sess
+        yield sess
 
-   async with async_engine.begin() as conn:
-       await conn.run_sync(SQLModel.metadata.drop_all)
+    async with async_engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.drop_all)
 
-   await async_engine.dispose()
+    await async_engine.dispose()
