@@ -129,11 +129,12 @@ test:
 ### Yet to apply commands
 #test:
 #	cd $(TEST_DIR) && pytest -v --cov=.
+
 #test-unit:
 #	cd $(TEST_DIR) && pytest -v tests/unit --cov=.
 #
-#test-int:
-#	cd $(TEST_DIR) && pytest -v tests/integration
+test-int:
+	cd $(TEST_DIR) && pytest -v integ
 #
 #test-missing:
 #	cd $(TEST_DIR) && pytest --cov=. --cov-report term-missing
