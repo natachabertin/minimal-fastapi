@@ -13,15 +13,6 @@ from app.db.session import async_engine
 from app.main import app
 
 
-@pytest.fixture(scope="session")
-def event_loop(request) -> Generator:  # noqa: indirect usage
-   loop = asyncio.get_event_loop_policy().new_event_loop()
-   yield loop
-   loop.close()
-
-
-
-
 async def create_testing_database():
     """
     WARN: This is a challenge non prod project; so, in order to create the test db on start,
