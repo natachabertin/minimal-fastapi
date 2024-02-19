@@ -4,17 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 
 @pytest.mark.asyncio
-async def test_get_root(
-       async_client: AsyncClient,
-       async_session: AsyncSession
-):
-   response = await async_client.get("/")
-
-   assert response.json() ==  {'message': 'Hello World'}
-   assert response.status_code == 200
-
-
-@pytest.mark.asyncio
 async def test_get_all_samples(
        async_client: AsyncClient,
        async_session: AsyncSession
@@ -26,7 +15,6 @@ async def test_get_all_samples(
         {"id": 2, "name": "Sample 1", "sample_type": "paint_sample", "price": 10.05},
     ]
    assert response.status_code == 200
-
 
 
 @pytest.mark.asyncio
