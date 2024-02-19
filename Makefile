@@ -123,25 +123,23 @@ mig-gen: ## Auto generate migrations. Add existence validations after, before up
 
 # Testing
 test:
-	cd $(TEST_DIR) && pytest -vv -p no:warnings
+	cd $(TEST_DIR) && pytest -v -p no:warnings
 
+test-debug:
+	cd $(TEST_DIR) && pytest -vv --cov=.
 
-### Yet to apply commands
-#test:
-#	cd $(TEST_DIR) && pytest -v --cov=.
+test-unit:
+	cd $(TEST_DIR) && pytest -v unit --cov=.
 
-#test-unit:
-#	cd $(TEST_DIR) && pytest -v tests/unit --cov=.
-#
 test-int:
 	cd $(TEST_DIR) && pytest -v integ
-#
-#test-missing:
-#	cd $(TEST_DIR) && pytest --cov=. --cov-report term-missing
-#
-#test-cov80:
-#	cd $(TEST_DIR) && pytest --cov=. --cov-fail-under=80
-#
+
+test-missing:
+	cd $(TEST_DIR) && pytest --cov=. --cov-report term-missing
+
+test-cov80:
+	cd $(TEST_DIR) && pytest --cov=. --cov-fail-under=80
+
 #cli:
 #	python app/cli.py
 #
