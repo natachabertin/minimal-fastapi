@@ -5,7 +5,7 @@ from app.api.services._core import CRUDMixin
 class SampleCRUD(CRUDMixin):
 
     async def create(self, data: SampleCreate) -> SampleDB:
-        values = data.dict()
+        values = data.model_dump()
 
         stored_sample = SampleDB(**values)
         self.db.add(stored_sample)
