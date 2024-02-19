@@ -1,12 +1,10 @@
 import pytest
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 @pytest.mark.asyncio
 async def test_get_root(
-       async_client: AsyncClient,
-       async_session: AsyncSession
+       async_client: AsyncClient
 ):
    response = await async_client.get("/")
 
