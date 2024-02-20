@@ -1,20 +1,20 @@
 import pytest
 
 from httpx import AsyncClient
-from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.main import app
 
 
 class TestSampleRoutes:
+    route = app.url_path_for("samples:get-samples")
+
     @pytest.mark.asyncio
     async def test_get_all_samples(
         self,
-        app: FastAPI,
-        async_client: AsyncClient
+        async_client: AsyncClient,
     ) -> None:
-
-        route = app.url_path_for("samples:get-samples")
-        response = await async_client.get(route)
+        response = await async_client.get(self.route)
 
         assert response.json() ==  [
              {"id": 1, "name": "Sample Route", "sample_type": "food_sample", "price": 20.05},
@@ -26,7 +26,6 @@ class TestSampleRoutes:
     @pytest.mark.asyncio
     async def test_post_sample(
         self,
-        app: FastAPI,
         async_client: AsyncClient,
         async_session: AsyncSession
     ):
@@ -36,7 +35,7 @@ class TestSampleRoutes:
             "price": 10
         }
         response = await async_client.post(
-            "/sample", json=payload
+            self.route, json=payload
         )
 
         assert response.json() == {
@@ -50,11 +49,10 @@ class TestSampleRoutes:
     @pytest.mark.asyncio
     async def test_post_sample_error(
         self,
-        app: FastAPI,
         async_client: AsyncClient,
         async_session: AsyncSession
     ):
-       response = await async_client.post("/sample")
+       response = await async_client.post(self.route)
 
        assert response.json() == {'detail': [{'input': None,
                  'loc': ['body'],

@@ -8,7 +8,7 @@ app = configure_server(settings)
 app = expose_routes(app)
 
 
-@app.get("/")
+@app.get("/", name="root")
 async def root():
     return {"message": "Hello World"}
 
