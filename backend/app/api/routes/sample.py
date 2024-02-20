@@ -12,7 +12,7 @@ from app.db.session import get_async_session
 router = APIRouter()
 
 
-@router.get("")
+@router.get("", name="samples:get-samples")
 async def get_all_samples() -> List[dict]:
     samples = [
         {"id": 1, "name": "Sample Route", "sample_type": "food_sample", "price": 20.05},
@@ -23,9 +23,10 @@ async def get_all_samples() -> List[dict]:
 
 
 @router.post(
-   "",
-   response_model=SampleRead,
-   status_code=HTTP_201_CREATED
+    "",
+    response_model=SampleRead,
+    status_code=HTTP_201_CREATED,
+    name="samples:create-sample"
 )
 async def create_sample(
        data: SampleCreate,
