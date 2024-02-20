@@ -1,15 +1,10 @@
-import asyncio
 import asyncpg
-from typing import Generator
-
-import pytest, pytest_asyncio
-from fastapi import FastAPI
+import pytest_asyncio
 from httpx import AsyncClient
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.config import settings
 from app.db.session import async_engine
 from app.main import app
 
@@ -41,13 +36,6 @@ async def async_client():
            base_url="http://127.0.0.1:8000"
    ) as client:
       yield client
-
-
-@pytest.fixture
-def app() -> FastAPI:
-    from app.core.server import configure_server
-
-    return configure_server(settings)
 
 
 @pytest_asyncio.fixture(scope="function")
